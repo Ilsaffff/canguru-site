@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend.canguru_app',
-    'mptt',
+
+    'rest_framework',
 
 ]
 
