@@ -1,16 +1,16 @@
 from rest_framework import serializers
-from .models import User
+from .models import *
+from django import forms
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = '__all__'
 
-
-class UserListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'career_direction')
-
-
+# class UserListSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('username', 'career_direction')
