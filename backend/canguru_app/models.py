@@ -1,14 +1,41 @@
 from django.db import models
-from django import forms
-from mptt.models import MPTTModel, TreeForeignKey
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
-class User(models.Model):
-    first_name = models.CharField(verbose_name='Имя', db_index=True, max_length=64)
-    last_name = models.CharField(verbose_name='Фамилия', max_length=64)
-    username = models.CharField(verbose_name='Никнейм', max_length=64)
-    date_of_birth = models.DateField(verbose_name='Дата рождения', max_length=16, null=True)
-    password = models.CharField(verbose_name='Пароль', max_length=64, null=True)
+class MyUserManager(BaseUserManager):
+
+    def save_user(self, email, username, password, **extra_fields):
+        if not email:
+            raise ValueError('Вы не ввели Email')
+        if not username:
+            raise ValueError('Вы не ввели Логин')
+        user = self.model(
+            email=self.normalize_email(email),
+            username=username,
+            **extra_fields
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, username, password):
+        return self.save_user(email, username, password)
+
+    def create_superuser(self, email, username, password):
+        return self.save_user(email, username, password, is_staff=True, is_superuser=True)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    id = models.AutoField(primary_key=True, unique=True)
+    username = models.CharField(max_length=50, unique=True)
+    email = models.CharField(max_length=100, unique=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    objects = MyUserManager()
 
     def __str__(self):
-        return self.username
+        return self.email

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from backend.canguru_app.views import UserViewSet
+from backend.canguru_app.views import UserViewSet, RegistrUserView
 from rest_framework import routers
 
 router = routers.SimpleRouter()
@@ -24,5 +24,8 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/auth/', include('rest_framework.urls')),
     path('api/v1/', include(router.urls)),
+    path('auth/', include('djoser.urls')),
+    path('api/v1/registr', RegistrUserView.as_view())
 ]
