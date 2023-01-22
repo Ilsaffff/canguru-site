@@ -6,9 +6,9 @@ class MyUserManager(BaseUserManager):
 
     def save_user(self, email, username, password, **extra_fields):
         if not email:
-            raise ValueError('Вы не ввели Email')
+            raise ValueError('Вы не ввели электронную почту')
         if not username:
-            raise ValueError('Вы не ввели Логин')
+            raise ValueError('Вы не ввели логин')
         user = self.model(
             email=self.normalize_email(email),
             username=username,
