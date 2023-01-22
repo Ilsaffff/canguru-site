@@ -25,12 +25,19 @@ class MyUserManager(BaseUserManager):
         return self.save_user(email, username, password, is_staff=True, is_superuser=True)
 
 
+class Grade(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True, unique=True)
     username = models.CharField(max_length=50, unique=True)
     email = models.CharField(max_length=100, unique=True, null=True)
-    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -38,4 +45,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
+
+
+class Area(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Module(models.Model):
+    name = models.CharField(max_length=100, null=True)
+
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True)
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Tracking(models.Model):
+    modules_junior = models.IntegerField()
+    modules_junior_plus = models.IntegerField()
+    modules_middle = models.IntegerField()
+    modules_middle_plus = models.IntegerField()
+    modules_senior = models.IntegerField()
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
