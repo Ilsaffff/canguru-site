@@ -6,7 +6,7 @@ from . import serializers
 from . import models
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-
+from . import permissions
 
 # from .permissions import IsOwnerOrReadOnly
 
@@ -14,13 +14,13 @@ from rest_framework.permissions import IsAuthenticated
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all()
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [permissions.AuthorAllStaffAllButEditOrReadOnly]
 
 
 class RegistrUserView(CreateAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserRegistrSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [AllowAny,]
 
     def post(self, request, *args, **kwargs):
         serializer = serializers.UserRegistrSerializer(data=request.data)
