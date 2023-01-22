@@ -6,7 +6,7 @@ migrate:
 	python manage.py makemigrations
 	python manage.py migrate
 
-createsuperuser:
+superuser:
 	python manage.py createsuperuser
 
 
