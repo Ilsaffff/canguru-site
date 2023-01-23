@@ -25,11 +25,11 @@ class MyUserManager(BaseUserManager):
         return self.save_user(email, username, password, is_staff=True, is_superuser=True)
 
 
-class Grade(models.Model):
-    name = models.CharField(max_length=64, unique=True)
+# class Grade(models.Model):
+#     name = models.CharField(max_length=64, unique=True)  # enum
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -37,7 +37,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     email = models.CharField(max_length=100, unique=True, null=True)
     is_staff = models.BooleanField(default=False)
-    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)  # enum 
+    intial_grade
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -59,17 +60,17 @@ class Module(models.Model):
     name = models.CharField(max_length=100, null=True)
 
     area = models.ForeignKey(Area, on_delete=models.CASCADE, null=True)
-    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True) # enum
 
     def __str__(self):
         return self.name
 
 
-class Tracking(models.Model):
-    modules_junior = models.IntegerField()
-    modules_junior_plus = models.IntegerField()
-    modules_middle = models.IntegerField()
-    modules_middle_plus = models.IntegerField()
-    modules_senior = models.IntegerField()
+# class Tracking(models.Model):
+#     modules_junior = models.IntegerField()
+#     modules_junior_plus = models.IntegerField()
+#     modules_middle = models.IntegerField()
+#     modules_middle_plus = models.IntegerField()
+#     modules_senior = models.IntegerField()
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

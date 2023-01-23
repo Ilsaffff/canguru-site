@@ -10,7 +10,7 @@ class AuthorAllStaffAllButEditOrReadOnly(permissions.BasePermission):
         return False
 
     def has_object_permission(self, request, view, obj):
-        if obj.email == request.user.email:
+        if obj.id == request.user.id:
             return True
         if request.user.is_staff and request.method not in self.edit_methods:
             return True
