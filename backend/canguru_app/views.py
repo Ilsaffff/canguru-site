@@ -16,6 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     permission_classes = [permissions.AuthorAllStaffAllButEditOrReadOnly]
 
+    # /users/myprofile
+    def get_my_profile():
+        return request.user
+
 
 class RegistrUserView(CreateAPIView):
     queryset = models.User.objects.all()
